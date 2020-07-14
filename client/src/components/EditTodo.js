@@ -1,18 +1,20 @@
 import React, { Fragment, useState } from "react";
 
 export default function EditTodo({ todo }) {
-  const [currentTodo, setCurrentTodo] = useState(todo.description);
+  const [description, setDescription] = useState(todo.description);
   const url = "http://localhost:5000/todos";
 
   const updateDescription = async (e) => {
     e.preventDefault();
     try {
-      const body = { currentTodo };
+      const body = { description };
       const response = await fetch(url + `/${todo.todo_id}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/jason" },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });
+
+      window.location = "/";
     } catch (error) {
       console.error(error.message);
     }
@@ -48,6 +50,7 @@ export default function EditTodo({ todo }) {
                 className="close"
                 data-dismiss="modal"
                 aria-label="Close"
+                onClick={() => setDescription(todo.description)}
               >
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -56,8 +59,8 @@ export default function EditTodo({ todo }) {
               <input
                 type="text"
                 className="form-control"
-                value={currentTodo}
-                onChange={(e) => setCurrentTodo(e.target.value)}
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
               />
             </div>
             <div className="modal-footer">
@@ -65,6 +68,7 @@ export default function EditTodo({ todo }) {
                 type="button"
                 className="btn btn-secondary"
                 data-dismiss="modal"
+                onClick={() => setDescription(todo.description)}
               >
                 Cancel
               </button>

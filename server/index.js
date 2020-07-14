@@ -23,7 +23,7 @@ app.post("/todos", async (req, res) => {
 
 app.get("/todos", async (_, res) => {
   try {
-    const allTodos = await pool.query("SELECT * FROM todo");
+    const allTodos = await pool.query("SELECT * FROM todo ORDER BY todo_id");
     res.json(allTodos.rows);
   } catch (error) {
     console.error(error.message);
