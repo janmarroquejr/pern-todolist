@@ -68,6 +68,9 @@ app.delete("/todos/:id", async (req, res) => {
   }
 });
 
+//auth routes
+app.use("/auth", require("./routes/jwtAuth"));
+
 app.listen(5000, () => {
   console.log("Server has started on port 5000");
 });
