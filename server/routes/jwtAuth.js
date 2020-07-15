@@ -2,8 +2,10 @@ const router = require("express").Router();
 const pool = require("../db");
 const bcrypt = require("bcrypt");
 const jwtGenerator = require("../utils/jwtGenerator");
+const validInfo = require("../middleware/validInfo");
+const authorization = require("../middleware/authorization");
 
-router.post("/register", async (req, res) => {
+router.post("/register", validInfo, async (req, res) => {
   try {
     //destructure the req.body (name, email, password)
     const { name, email, password } = req.body;
@@ -39,7 +41,7 @@ router.post("/register", async (req, res) => {
 });
 
 //login route
-router.post("/login", async (req, res) => {
+router.post("/login", validInfo, async (req, res) => {
   try {
     //destructure req.body
     const { email, password } = req.body;
@@ -54,7 +56,7 @@ router.post("/login", async (req, res) => {
     const validPassword = bcrypt.compare(password, user.rows[0].user_password);
 
     if (!validPassword) {
-      return res.status(401).json("Email or password is incorrect!");
+      return res.status(401).json({ msg: "Email or password is incorrect!" });
     }
 
     //give jwt token
@@ -63,5 +65,14 @@ router.post("/login", async (req, res) => {
   } catch (error) {
     console.error(error.message);
   }
+
+  router.get("/is-verify", authorization, async (req, res) => {
+    try {
+      res.json(true);
+    } catch (error) {
+      console.error(error.message);
+      res.status(500).json({ msg: "SERVER ERROR" });
+    }
+  });
 });
 module.exports = router;
