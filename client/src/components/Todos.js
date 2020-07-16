@@ -18,11 +18,11 @@ export default function ListTodo() {
 
   const deleteTodo = async (id) => {
     try {
-      const deleteTodo = await fetch(url + `/${id}`, {
+      await fetch(url + `/${id}`, {
         method: "DELETE",
       });
 
-      setTodos(todos.filter((todo) => todo.todo_id != id));
+      setTodos(todos.filter((todo) => todo.todo_id !== id));
     } catch (error) {
       console.error(error.message);
     }

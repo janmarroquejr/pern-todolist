@@ -8,7 +8,7 @@ export default function InputTodo() {
     try {
       const url = "http://localhost:5000/todos";
       const body = { description };
-      const response = await fetch(url, {
+      await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),

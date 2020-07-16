@@ -8,7 +8,7 @@ export default function EditTodo({ todo }) {
     e.preventDefault();
     try {
       const body = { description };
-      const response = await fetch(url + `/${todo.todo_id}`, {
+      await fetch(url + `/${todo.todo_id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
