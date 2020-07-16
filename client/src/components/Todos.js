@@ -1,9 +1,8 @@
 import React, { Fragment, useEffect, useState } from "react";
 import EditTodo from "./EditTodo";
 import InputTodo from "./InputTodo";
-import { Link } from "react-router-dom";
 
-export default function ListTodo() {
+export default function ListTodo({ setAuth }) {
   const [todos, setTodos] = useState([]);
   const [name, setName] = useState("");
   const url = "http://localhost:5000/todos";
@@ -24,7 +23,7 @@ export default function ListTodo() {
       });
 
       const parseRes = await response.json();
-      console.log(parseRes);
+      setName(parseRes.user_name);
     } catch (error) {
       console.error(error.message);
     }
@@ -83,9 +82,18 @@ export default function ListTodo() {
     });
   }
 
+  const logout = (e) => {
+    e.preventDefault();
+    localStorage.removeItem("token");
+    setAuth(false);
+  };
+
   return (
     <Fragment>
-      <Link to="/login">Log Out</Link>
+      <h2>Hello {name}!</h2>
+      <button className="btn btn-danger" onClick={(e) => logout(e)}>
+        Log Out
+      </button>
       <InputTodo />
       <table className="table mt-5 text-center">
         <thead>

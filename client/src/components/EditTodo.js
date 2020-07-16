@@ -1,7 +1,9 @@
 import React, { Fragment, useState } from "react";
 
 export default function EditTodo({ todo }) {
-  const [description, setDescription] = useState(todo.description);
+  const [description, setDescription] = useState(
+    todo.description === null ? "" : todo.description
+  );
   const url = "http://localhost:5000/todos";
 
   const updateDescription = async (e) => {
@@ -34,7 +36,7 @@ export default function EditTodo({ todo }) {
       <div
         className="modal fade"
         id={`id${todo.todo_id}`}
-        tabindex="-1"
+        tabIndex="-1"
         role="dialog"
         aria-labelledby="exampleModalCenterTitle"
         aria-hidden="true"
