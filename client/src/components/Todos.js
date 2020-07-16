@@ -1,6 +1,7 @@
 import React, { Fragment, useEffect, useState } from "react";
 import EditTodo from "./EditTodo";
 import InputTodo from "./InputTodo";
+import { toast } from "react-toastify";
 
 export default function ListTodo({ setAuth }) {
   const [todos, setTodos] = useState([]);
@@ -86,6 +87,7 @@ export default function ListTodo({ setAuth }) {
     e.preventDefault();
     localStorage.removeItem("token");
     setAuth(false);
+    toast.success("Logged out successfully!");
   };
 
   return (

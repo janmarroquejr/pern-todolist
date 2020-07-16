@@ -4,6 +4,10 @@ import Todos from "./components/Todos";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+toast.configure();
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -20,7 +24,7 @@ function App() {
       });
 
       const parseRes = await response.json();
-      parseRes ? setIsAuthenticated(true) : setIsAuthenticated(false);
+      parseRes === true ? setIsAuthenticated(true) : setIsAuthenticated(false);
     } catch (error) {
       console.error(error.message);
     }
