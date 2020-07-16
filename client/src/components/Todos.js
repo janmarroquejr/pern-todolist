@@ -1,10 +1,35 @@
 import React, { Fragment, useEffect, useState } from "react";
 import EditTodo from "./EditTodo";
 import InputTodo from "./InputTodo";
+import { Link } from "react-router-dom";
 
 export default function ListTodo() {
   const [todos, setTodos] = useState([]);
+  const [name, setName] = useState("");
   const url = "http://localhost:5000/todos";
+
+  useEffect(() => {
+    getTodos();
+  }, []);
+
+  useEffect(() => {
+    getName();
+  }, []);
+
+  const getName = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/", {
+        method: "GET",
+        headers: { token: localStorage.token },
+      });
+
+      const parseRes = await response.json();
+      console.log(parseRes);
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+
   const getTodos = async () => {
     try {
       const response = await fetch(url);
@@ -27,10 +52,6 @@ export default function ListTodo() {
       console.error(error.message);
     }
   };
-
-  useEffect(() => {
-    getTodos();
-  }, []);
 
   let todoList;
 
@@ -64,6 +85,7 @@ export default function ListTodo() {
 
   return (
     <Fragment>
+      <Link to="/login">Log Out</Link>
       <InputTodo />
       <table className="table mt-5 text-center">
         <thead>
