@@ -20,7 +20,6 @@ export default function ListTodo({ setAuth }) {
       });
 
       const parseRes = await response.json();
-      // console.log(parseRes);
       setName(parseRes[0].user_name);
     } catch (error) {
       console.error(error.message);
