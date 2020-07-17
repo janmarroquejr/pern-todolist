@@ -6,11 +6,7 @@ import { toast } from "react-toastify";
 export default function ListTodo({ setAuth }) {
   const [todos, setTodos] = useState([]);
   const [name, setName] = useState("");
-  const url = "http://localhost:5000/todos";
-
-  useEffect(() => {
-    getTodos();
-  }, []);
+  const url = "http://localhost:5000/home";
 
   useEffect(() => {
     getName();
@@ -18,13 +14,14 @@ export default function ListTodo({ setAuth }) {
 
   const getName = async () => {
     try {
-      const response = await fetch("http://localhost:5000/", {
+      const response = await fetch("http://localhost:5000/home/", {
         method: "GET",
         headers: { token: localStorage.token },
       });
 
       const parseRes = await response.json();
-      setName(parseRes.user_name);
+      // console.log(parseRes);
+      setName(parseRes[0].user_name);
     } catch (error) {
       console.error(error.message);
     }
@@ -32,7 +29,10 @@ export default function ListTodo({ setAuth }) {
 
   const getTodos = async () => {
     try {
-      const response = await fetch(url);
+      const response = await fetch(url, {
+        method: "GET",
+        headers: { token: localStorage.token },
+      });
       const jsonData = await response.json();
 
       setTodos(jsonData);
@@ -41,11 +41,18 @@ export default function ListTodo({ setAuth }) {
     }
   };
 
+  useEffect(() => {
+    getTodos();
+    console.log(todos);
+  }, []);
+
   const deleteTodo = async (id) => {
     try {
-      await fetch(url + `/${id}`, {
+      const response = await fetch(url + `/todos/${id}`, {
         method: "DELETE",
+        headers: { token: localStorage.token },
       });
+      toast.success(response.json());
 
       setTodos(todos.filter((todo) => todo.todo_id !== id));
     } catch (error) {
@@ -55,10 +62,10 @@ export default function ListTodo({ setAuth }) {
 
   let todoList;
 
-  if (todos.length === 0) {
+  if (todos.length === 0 || todos[0].todo_id === null) {
     todoList = (
       <tr>
-        <td colSpan="2">Nothing to display</td>
+        <td colSpan="3">Nothing to display</td>
       </tr>
     );
   } else {
@@ -67,6 +74,7 @@ export default function ListTodo({ setAuth }) {
         <tr key={todo.todo_id}>
           <th>{++index}</th>
           <td>{todo.description}</td>
+          <td>{todo.user_name}</td>
           <td>
             <EditTodo todo={todo} />
           </td>
@@ -102,6 +110,7 @@ export default function ListTodo({ setAuth }) {
           <tr>
             <th>#</th>
             <th>Todo</th>
+            <th>User</th>
           </tr>
         </thead>
         <tbody>{todoList}</tbody>

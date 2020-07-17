@@ -6,11 +6,14 @@ export default function InputTodo() {
   const onSubmitForm = async (e) => {
     e.preventDefault();
     try {
-      const url = "http://localhost:5000/todos";
+      const url = "http://localhost:5000/home/todos";
       const body = { description };
       await fetch(url, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          token: localStorage.token,
+        },
         body: JSON.stringify(body),
       });
       window.location = "/";
@@ -23,6 +26,7 @@ export default function InputTodo() {
       <h1 className="text-center mt-5">PERN Stack TodoList</h1>
       <form action="" className="d-flex mt-5" onSubmit={onSubmitForm}>
         <input
+          autoFocus
           type="text"
           className="form-control"
           value={description}

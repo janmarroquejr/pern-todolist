@@ -1,21 +1,26 @@
 import React, { Fragment, useState } from "react";
+import { toast } from "react-toastify";
 
 export default function EditTodo({ todo }) {
   const [description, setDescription] = useState(
     todo.description === null ? "" : todo.description
   );
-  const url = "http://localhost:5000/todos";
+  const url = "http://localhost:5000/home/todos";
 
   const updateDescription = async (e) => {
     e.preventDefault();
     try {
       const body = { description };
-      await fetch(url + `/${todo.todo_id}`, {
+      const response = await fetch(url + `/${todo.todo_id}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          token: localStorage.token,
+        },
         body: JSON.stringify(body),
       });
 
+      toast.success(response.json());
       window.location = "/";
     } catch (error) {
       console.error(error.message);
